@@ -1,0 +1,13 @@
+{
+  "version": "dev-sample",
+  "languages": ["en"],
+  "words": [
+    "admin",
+    "administrator",
+    "api",
+    "root",
+    "staff",
+    "support",
+    "system"
+  ]
+}

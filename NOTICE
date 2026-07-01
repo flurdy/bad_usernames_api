@@ -1,0 +1,5 @@
+Bad Usernames API
+Copyright 2026 Ivar Abrahamsen and contributors
+
+This project is designed to use the flurdy/bad_usernames dataset, which is licensed CC0-1.0.
+The API service code in this repository is licensed Apache-2.0.

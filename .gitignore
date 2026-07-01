@@ -1,0 +1,28 @@
+# sbt / Scala
+target/
+project/target/
+project/project/
+.bsp/
+.metals/
+.scala-build/
+
+# JVM
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+replay_pid*
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+
+# Local env
+.env
+.env.*
+!.env.example
