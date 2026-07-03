@@ -40,7 +40,10 @@ object UsernameDataset:
     parse(content).flatMap(_.as[RawDataset]) match
       case Left(error) =>
         Sync[F].raiseError(
-          new RuntimeException(s"Failed to load bad usernames dataset from $path: ${error.getMessage}", error)
+          new RuntimeException(
+            s"Failed to load bad usernames dataset from $path: ${error.getMessage}",
+            error
+          )
         )
       case Right(rawDataset) =>
         val words = rawDataset.words.map(UsernameNormalizer.normalize).filter(_.nonEmpty).toSet
