@@ -24,15 +24,17 @@ final class Routes(
       else Ok(toResponse(result))
 
     case request @ POST -> Root / "api" / "v1" / "check" =>
-      request.as[BatchCheckRequest].flatMap { body =>
-        if body.usernames.size > batchLimit then
-          BadRequest(ErrorResponse(s"batch size must not exceed $batchLimit"))
-        else
-          val checked = body.usernames.map(checker.check)
-          if checked.exists(_.normalized.isEmpty) then
-            BadRequest(ErrorResponse("usernames must not contain empty values"))
+      request.attemptAs[BatchCheckRequest].value.flatMap {
+        case Left(_) =>
+          BadRequest(ErrorResponse("request body must be JSON with a 'usernames' array"))
+        case Right(body) =>
+          if body.usernames.size > batchLimit then
+            BadRequest(ErrorResponse(s"batch size must not exceed $batchLimit"))
           else
-            Ok(BatchCheckResponse(checked.map(toResponse)))
+            val checked = body.usernames.map(checker.check)
+            if checked.exists(_.normalized.isEmpty) then
+              BadRequest(ErrorResponse("usernames must not contain empty values"))
+            else Ok(BatchCheckResponse(checked.map(toResponse)))
       }
 
     case GET -> Root / "api" / "v1" / "meta" =>
