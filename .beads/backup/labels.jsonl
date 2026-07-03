@@ -6,6 +6,7 @@
 {"issue_id":"bad_usernames_api-7he","label":"docker"}
 {"issue_id":"bad_usernames_api-7he","label":"milestone-3"}
 {"issue_id":"bad_usernames_api-au3","label":"ci"}
+{"issue_id":"bad_usernames_api-au3","label":"circleci"}
 {"issue_id":"bad_usernames_api-au3","label":"milestone-1"}
 {"issue_id":"bad_usernames_api-i4i","label":"docker"}
 {"issue_id":"bad_usernames_api-i4i","label":"docs"}
