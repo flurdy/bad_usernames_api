@@ -2,7 +2,7 @@
 
 The production image is built with `sbt-native-packager` and a multi-stage Dockerfile.
 
-CI publishes `main` builds to `quay.io/flurdy/bad-usernames-api` as `latest` and semver-style `1.0.<circle-build-number>` tags.
+CI publishes `main` builds to `quay.io/flurdy/badusernames.flurdy.io` as `latest` and semver-style `1.0.<circle-build-number>` tags.
 
 ## Build
 
@@ -19,7 +19,7 @@ docker build -t bad-usernames-api:local .
 Pull the public image from Quay.io:
 
 ```bash
-docker pull quay.io/flurdy/bad-usernames-api:latest
+docker pull quay.io/flurdy/badusernames.flurdy.io:latest
 ```
 
 ## Run with Docker
@@ -45,7 +45,7 @@ Using the public Quay image:
 docker run --rm \
   -p 8080:8080 \
   -v /path/to/bad-usernames.json:/data/bad-usernames.json:ro \
-  quay.io/flurdy/bad-usernames-api:latest
+  quay.io/flurdy/badusernames.flurdy.io:latest
 ```
 
 For a real mounted dataset with the local image:

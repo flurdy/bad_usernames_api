@@ -14,7 +14,7 @@ For local evaluation you can use `dev/sample-bad-usernames.json`. Production/sel
 Pull the public image:
 
 ```bash
-docker pull quay.io/flurdy/bad-usernames-api:latest
+docker pull quay.io/flurdy/badusernames.flurdy.io:latest
 ```
 
 Or build the local image:
@@ -29,7 +29,7 @@ Run it with a mounted dataset:
 docker run --rm \
   -p 8080:8080 \
   -v /path/to/bad-usernames.json:/data/bad-usernames.json:ro \
-  quay.io/flurdy/bad-usernames-api:latest
+  quay.io/flurdy/badusernames.flurdy.io:latest
 ```
 
 If using the locally built image, replace the image name with `bad-usernames-api:local`.
