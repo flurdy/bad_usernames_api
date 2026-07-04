@@ -7,7 +7,7 @@ version: 2.1
 # - DOCKER_PASSWORD: Quay.io robot/user password or token
 #
 # All branches run the Scala CI gate and build the Docker image. The main branch
-# also publishes the image to Quay.io.
+# also publishes the image to Quay.io as latest and 0.1.<build>.
 
 jobs:
   build:
@@ -41,6 +41,7 @@ jobs:
     working_directory: ~/repo
     environment:
       IMAGE_NAME: quay.io/flurdy/bad-usernames-api
+      IMAGE_BASE_VERSION: "0.1"
     steps:
       - checkout
       - setup_remote_docker
@@ -61,6 +62,7 @@ jobs:
     working_directory: ~/repo
     environment:
       IMAGE_NAME: quay.io/flurdy/bad-usernames-api
+      IMAGE_BASE_VERSION: "0.1"
     steps:
       - setup_remote_docker
       - attach_workspace:
@@ -71,16 +73,14 @@ jobs:
       - run:
           name: Publish image to Quay.io
           command: |
-            SHORT_SHA="$(echo "$CIRCLE_SHA1" | cut -c1-7)"
+            IMAGE_VERSION="$IMAGE_BASE_VERSION.$CIRCLE_BUILD_NUM"
 
             echo "$DOCKER_PASSWORD" | docker login quay.io -u "$DOCKER_LOGIN" --password-stdin
 
-            docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:sha-$SHORT_SHA"
-            docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:build-$CIRCLE_BUILD_NUM"
+            docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:$IMAGE_VERSION"
 
             docker push "$IMAGE_NAME:latest"
-            docker push "$IMAGE_NAME:sha-$SHORT_SHA"
-            docker push "$IMAGE_NAME:build-$CIRCLE_BUILD_NUM"
+            docker push "$IMAGE_NAME:$IMAGE_VERSION"
 
 workflows:
   build:
