@@ -72,6 +72,7 @@ Useful local targets:
 
 ```bash
 make ci
+make ci-status
 make docker-build
 make docker-run
 ```

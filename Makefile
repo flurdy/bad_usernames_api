@@ -43,6 +43,14 @@ check: fmt-check test ## Format check + tests (pre-commit gate)
 .PHONY: ci
 ci: fmt-check compile test ## CI gate: formatting, compile, and tests
 
+.PHONY: ci-status
+ci-status: ## Show GitHub/CircleCI status for the current commit
+	@repo=$$(gh repo view --json nameWithOwner --jq .nameWithOwner); \
+	sha=$$(git rev-parse HEAD); \
+	echo "CI status for $$repo @ $$sha"; \
+	gh api "repos/$$repo/commits/$$sha/status" \
+		--jq '.state as $$state | "overall: \($$state)", (.statuses[] | "\(.state)  \(.context): \(.description // "")  \(.target_url // "")")'
+
 .PHONY: console
 console: ## Start an sbt shell
 	$(SBT) shell
