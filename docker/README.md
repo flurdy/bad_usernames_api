@@ -2,7 +2,7 @@
 
 The production image is built with `sbt-native-packager` and a multi-stage Dockerfile.
 
-CI publishes `main` builds to `quay.io/flurdy/bad-usernames-api` as `latest` and semver-style `0.1.<circle-build-number>` tags.
+CI publishes `main` builds to `quay.io/flurdy/bad-usernames-api` as `latest` and semver-style `1.0.<circle-build-number>` tags.
 
 ## Build
 

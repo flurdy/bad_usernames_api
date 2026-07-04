@@ -7,7 +7,7 @@ version: 2.1
 # - DOCKER_PASSWORD: Quay.io robot/user password or token
 #
 # All branches run the Scala CI gate and build the Docker image. The main branch
-# also publishes the image to Quay.io as latest and 0.1.<build>.
+# also publishes the image to Quay.io as latest and 1.0.<build>.
 
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
     working_directory: ~/repo
     environment:
       IMAGE_NAME: quay.io/flurdy/bad-usernames-api
-      IMAGE_BASE_VERSION: "0.1"
+      IMAGE_BASE_VERSION: "1.0"
     steps:
       - checkout
       - setup_remote_docker
@@ -62,7 +62,7 @@ jobs:
     working_directory: ~/repo
     environment:
       IMAGE_NAME: quay.io/flurdy/bad-usernames-api
-      IMAGE_BASE_VERSION: "0.1"
+      IMAGE_BASE_VERSION: "1.0"
     steps:
       - setup_remote_docker
       - attach_workspace:
