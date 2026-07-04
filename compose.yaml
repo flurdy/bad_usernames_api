@@ -1,0 +1,13 @@
+services:
+  bad-usernames-api:
+    image: bad-usernames-api:local
+    build: .
+    ports:
+      - "${BAD_USERNAMES_HOST_PORT:-8080}:8080"
+    environment:
+      BAD_USERNAMES_HOST: 0.0.0.0
+      BAD_USERNAMES_PORT: 8080
+      BAD_USERNAMES_DATASET_PATH: /data/bad-usernames.json
+      BAD_USERNAMES_BATCH_LIMIT: "${BAD_USERNAMES_BATCH_LIMIT:-1000}"
+    volumes:
+      - "${BAD_USERNAMES_DATASET_FILE:-./dev/sample-bad-usernames.json}:/data/bad-usernames.json:ro"

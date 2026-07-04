@@ -76,6 +76,8 @@ make docker-build
 make docker-run
 ```
 
+For container and self-hosting examples, see `docker/README.md` and `docs/self-hosting.md`.
+
 ## Configuration
 
 | Environment variable | Default | Description |
