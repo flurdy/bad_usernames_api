@@ -76,7 +76,7 @@ make docker-build
 make docker-run
 ```
 
-For container and self-hosting examples, see `docker/README.md` and `docs/self-hosting.md`.
+For container and self-hosting examples, see `docker/README.md` and `docs/self-hosting.md`. `main` builds publish a public image at `quay.io/flurdy/bad-usernames-api`.
 
 ## Configuration
 

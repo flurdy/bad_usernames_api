@@ -2,9 +2,12 @@ version: 2.1
 
 # CI for Bad Usernames API.
 #
-# Single 'build' job: format check + compile + test — the same gate as
-# `make ci`. Docker image build/publish and integration/contract jobs
-# are intentionally omitted; they belong with future release/test tiers.
+# Requires project or context environment variables for publishing:
+# - DOCKER_LOGIN: Quay.io robot/user login
+# - DOCKER_PASSWORD: Quay.io robot/user password or token
+#
+# All branches run the Scala CI gate and build the Docker image. The main branch
+# also publishes the image to Quay.io.
 
 jobs:
   build:
@@ -32,7 +35,63 @@ jobs:
       - store_test_results:
           path: target/test-reports
 
+  build-image:
+    docker:
+      - image: cimg/base:stable
+    working_directory: ~/repo
+    environment:
+      IMAGE_NAME: quay.io/flurdy/bad-usernames-api
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: make docker-build IMAGE=$IMAGE_NAME:latest
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME:latest
+      - persist_to_workspace:
+          root: .
+          paths:
+            - image.tar
+
+  publish-image:
+    docker:
+      - image: cimg/base:stable
+    working_directory: ~/repo
+    environment:
+      IMAGE_NAME: quay.io/flurdy/bad-usernames-api
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load archived Docker image
+          command: docker load -i image.tar
+      - run:
+          name: Publish image to Quay.io
+          command: |
+            SHORT_SHA="$(echo "$CIRCLE_SHA1" | cut -c1-7)"
+
+            echo "$DOCKER_PASSWORD" | docker login quay.io -u "$DOCKER_LOGIN" --password-stdin
+
+            docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:sha-$SHORT_SHA"
+            docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:build-$CIRCLE_BUILD_NUM"
+
+            docker push "$IMAGE_NAME:latest"
+            docker push "$IMAGE_NAME:sha-$SHORT_SHA"
+            docker push "$IMAGE_NAME:build-$CIRCLE_BUILD_NUM"
+
 workflows:
   build:
     jobs:
       - build
+      - build-image:
+          requires:
+            - build
+      - publish-image:
+          requires:
+            - build-image
+          filters:
+            branches:
+              only: main
