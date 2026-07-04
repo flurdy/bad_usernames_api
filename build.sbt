@@ -9,8 +9,14 @@ val munitCatsEffectVersion = "2.0.0"
 val logbackVersion = "1.5.16"
 
 lazy val root = (project in file("."))
+  .enablePlugins(JavaAppPackaging)
   .settings(
     name := "bad-usernames-api",
+    Compile / mainClass := Some("io.flurdy.badusernames.Main"),
+    Docker / packageName := "bad-usernames-api",
+    dockerBaseImage := "eclipse-temurin:17-jre-alpine",
+    dockerExposedPorts := Seq(8080),
+    dockerUpdateLatest := true,
     libraryDependencies ++= Seq(
       "org.http4s" %% "http4s-ember-server" % http4sVersion,
       "org.http4s" %% "http4s-circe" % http4sVersion,

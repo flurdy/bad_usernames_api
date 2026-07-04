@@ -1,0 +1,12 @@
+.git
+.beads
+.metals
+.bloop
+.vscode
+target
+project/target
+project/project
+.cache
+.env
+.envrc
+*.log

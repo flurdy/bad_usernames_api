@@ -13,6 +13,12 @@ Initial environment variables:
 - `BAD_USERNAMES_DATASET_PATH`
 - `BAD_USERNAMES_BATCH_LIMIT`
 
+## Container runtime
+
+The production Docker image does not include a dataset. Operators must mount a dataset file and point `BAD_USERNAMES_DATASET_PATH` at it. The default container path is `/data/bad-usernames.json`; if it is not present, startup should fail rather than serving from an implicit fallback.
+
+See `docker/README.md` for local build and run commands.
+
 ## Health and observability
 
 Initial endpoints:
