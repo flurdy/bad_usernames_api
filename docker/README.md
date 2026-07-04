@@ -5,10 +5,22 @@ The production image is built with `sbt-native-packager` and a multi-stage Docke
 Build locally:
 
 ```bash
+make docker-build
+```
+
+Or call Docker directly:
+
+```bash
 docker build -t bad-usernames-api:local .
 ```
 
 Run with a mounted dataset:
+
+```bash
+make docker-run
+```
+
+Or call Docker directly:
 
 ```bash
 docker run --rm \

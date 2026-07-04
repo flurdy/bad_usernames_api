@@ -52,6 +52,12 @@ Requirements:
 Run locally:
 
 ```bash
+make run
+```
+
+Or call sbt directly:
+
+```bash
 BAD_USERNAMES_DATASET_PATH=dev/sample-bad-usernames.json sbt run
 ```
 
@@ -60,6 +66,14 @@ Then open:
 ```bash
 curl http://localhost:8080/api/v1/check/admin
 curl http://localhost:8080/api/v1/meta
+```
+
+Useful local targets:
+
+```bash
+make ci
+make docker-build
+make docker-run
 ```
 
 ## Configuration

@@ -3,8 +3,11 @@
 # Run `make help` (or just `make`) to list targets.
 
 # Use the sample dataset for local runs unless overridden on the command line.
-DATASET ?= dev/sample-bad-usernames.json
-SBT     ?= sbt
+DATASET   ?= dev/sample-bad-usernames.json
+SBT       ?= sbt
+DOCKER    ?= docker
+IMAGE     ?= bad-usernames-api:local
+HOST_PORT ?= 8080
 
 .DEFAULT_GOAL := help
 
@@ -37,6 +40,9 @@ fmt-check: ## Check formatting without modifying files
 .PHONY: check
 check: fmt-check test ## Format check + tests (pre-commit gate)
 
+.PHONY: ci
+ci: fmt-check compile test ## CI gate: formatting, compile, and tests
+
 .PHONY: console
 console: ## Start an sbt shell
 	$(SBT) shell
@@ -44,6 +50,17 @@ console: ## Start an sbt shell
 .PHONY: clean
 clean: ## Remove build artifacts
 	$(SBT) clean
+
+.PHONY: docker-build
+docker-build: ## Build the local Docker image
+	$(DOCKER) build -t $(IMAGE) .
+
+.PHONY: docker-run
+docker-run: ## Run the Docker image with DATASET mounted read-only
+	$(DOCKER) run --rm \
+		-p $(HOST_PORT):8080 \
+		-v $(abspath $(DATASET)):/data/bad-usernames.json:ro \
+		$(IMAGE)
 
 .PHONY: smoke
 smoke: ## Curl the running API (single check + meta) on localhost:8080

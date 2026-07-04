@@ -3,9 +3,8 @@ version: 2.1
 # CI for Bad Usernames API.
 #
 # Single 'build' job: format check + compile + test — the same gate as
-# `make check`. Docker image build/publish and integration/contract jobs
-# are intentionally omitted; they belong with the Dockerfile and future
-# test tiers (see beads bad_usernames_api-7he / -0u3).
+# `make ci`. Docker image build/publish and integration/contract jobs
+# are intentionally omitted; they belong with future release/test tiers.
 
 jobs:
   build:
@@ -19,23 +18,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.sbt" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
+            - v1-dependencies-{{ checksum "build.sbt" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Makefile" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
       - run:
-          name: Check formatting
-          command: cat /dev/null | sbt scalafmtCheckAll scalafmtSbtCheck
-      - run:
-          name: Compile
-          command: cat /dev/null | sbt Test/compile
-      - run:
-          name: Test
-          command: cat /dev/null | sbt test
+          name: CI gate
+          command: cat /dev/null | make ci
       - save_cache:
           paths:
             - ~/.m2
             - ~/.ivy2/cache
             - ~/.sbt
             - ~/.cache/coursier
-          key: v1-dependencies-{{ checksum "build.sbt" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
+          key: v1-dependencies-{{ checksum "build.sbt" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Makefile" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
       - store_test_results:
           path: target/test-reports
 
