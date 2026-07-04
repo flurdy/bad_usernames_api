@@ -19,6 +19,18 @@ jobs:
       TERM: dumb
     steps:
       - checkout
+      - run:
+          name: Install make
+          command: |
+            if ! command -v make >/dev/null 2>&1; then
+              if command -v sudo >/dev/null 2>&1; then
+                sudo apt-get update
+                sudo apt-get install -y make
+              else
+                apt-get update
+                apt-get install -y make
+              fi
+            fi
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "build.sbt" }}-{{ checksum ".circleci/config.yml" }}-{{ checksum "Makefile" }}-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}
