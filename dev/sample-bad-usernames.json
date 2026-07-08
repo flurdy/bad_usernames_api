@@ -1,7 +1,7 @@
 {
   "version": "dev-sample",
   "languages": ["en"],
-  "words": [
+  "usernames": [
     "admin",
     "administrator",
     "api",
@@ -9,5 +9,19 @@
     "staff",
     "support",
     "system"
+  ],
+  "bundles": [
+    {
+      "language": "en",
+      "usernames": [
+        "admin",
+        "administrator",
+        "api",
+        "root",
+        "staff",
+        "support",
+        "system"
+      ]
+    }
   ]
 }

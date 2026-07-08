@@ -6,7 +6,7 @@ Bad Usernames API should stay deliberately small.
 
 1. Read configuration from environment variables.
 2. Load the username dataset at startup.
-3. Normalize all dataset words into an in-memory `Set[String]`.
+3. Normalize all dataset usernames into an in-memory `Set[String]`.
 4. Serve HTTP requests using http4s.
 5. For each check, normalize input and perform an exact set lookup.
 

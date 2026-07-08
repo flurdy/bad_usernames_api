@@ -77,6 +77,8 @@ make docker-build
 make docker-run
 ```
 
+For real-dataset testing, use `BAD_USERNAMES_DATASET_PATH=data/bad-usernames.json make run`; `/api/v1/meta` will report the vendored upstream commit from `data/bad-usernames.version`.
+
 For container and self-hosting examples, see `docker/README.md` and `docs/self-hosting.md`. `main` builds publish a public image at `quay.io/flurdy/badusernames.flurdy.io`.
 
 ## Configuration
@@ -86,6 +88,7 @@ For container and self-hosting examples, see `docker/README.md` and `docs/self-h
 | `BAD_USERNAMES_HOST` | `0.0.0.0` | HTTP bind host |
 | `BAD_USERNAMES_PORT` | `8080` | HTTP bind port |
 | `BAD_USERNAMES_DATASET_PATH` | `dev/sample-bad-usernames.json` | Dataset JSON path |
+| `BAD_USERNAMES_DATASET_VERSION` | unset | Optional dataset version/commit exposed in `/api/v1/meta` |
 | `BAD_USERNAMES_BATCH_LIMIT` | `1000` | Max usernames per batch request |
 
 ## Licenses

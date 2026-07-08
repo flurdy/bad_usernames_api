@@ -24,11 +24,11 @@ object Main extends IOApp.Simple:
       port <- IO.fromOption(Port.fromInt(config.port))(
         new IllegalArgumentException(s"Invalid BAD_USERNAMES_PORT: ${config.port}")
       )
-      dataset <- UsernameDataset.load[IO](config.datasetPath)
+      dataset <- UsernameDataset.load[IO](config.datasetPath, config.datasetVersion)
       _ <- Logger[IO].info(
         s"Loaded ${dataset.metadata.wordCount} bad usernames from ${config.datasetPath}"
       )
-      checker = UsernameChecker(dataset.words)
+      checker = UsernameChecker(dataset.usernames)
       routes = Routes(checker, dataset.metadata, config.batchLimit)
       _ <- Logger[IO].info(s"Starting Bad Usernames API on ${config.host}:${config.port}")
       _ <- EmberServerBuilder

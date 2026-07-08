@@ -54,6 +54,7 @@ For a real mounted dataset with the local image:
 docker run --rm \
   -p 8080:8080 \
   -v /path/to/bad-usernames.json:/data/bad-usernames.json:ro \
+  -e BAD_USERNAMES_DATASET_VERSION=flurdy/bad_usernames@<commit> \
   bad-usernames-api:local
 ```
 
@@ -96,6 +97,8 @@ docker compose up --build
 
 The runtime image does **not** include a dataset. By default it reads `/data/bad-usernames.json`; if that file is not mounted, startup fails instead of serving from a hidden fallback.
 
+The loader accepts the upstream single-file shape (`{"usernames": [...]}`) and the combined snapshot shape documented in `docs/dataset.md`. Set `BAD_USERNAMES_DATASET_VERSION` or mount an adjacent version file so `/api/v1/meta` exposes the upstream commit.
+
 ## Configuration
 
 | Environment variable | Default in image | Description |
@@ -103,6 +106,7 @@ The runtime image does **not** include a dataset. By default it reads `/data/bad
 | `BAD_USERNAMES_HOST` | `0.0.0.0` | HTTP bind host |
 | `BAD_USERNAMES_PORT` | `8080` | HTTP bind port |
 | `BAD_USERNAMES_DATASET_PATH` | `/data/bad-usernames.json` | Dataset JSON path inside the container |
+| `BAD_USERNAMES_DATASET_VERSION` | unset | Optional dataset version/commit exposed in `/api/v1/meta` |
 | `BAD_USERNAMES_BATCH_LIMIT` | `1000` | Max usernames per batch request |
 
 For broader self-hosting notes, see `docs/self-hosting.md`.

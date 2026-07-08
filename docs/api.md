@@ -66,15 +66,15 @@ Response:
 
 Returns service and dataset metadata.
 
-Planned fields:
+Response fields:
 
-- service name
-- service version
-- dataset version or commit
-- loaded languages
-- word count
-- normalization strategy
-- batch limit
+- `service`: service name
+- `serviceVersion`: API service version
+- `datasetVersion`: dataset version or upstream commit when configured, otherwise `unknown`
+- `languages`: loaded dataset languages, when known
+- `wordCount`: number of unique normalized blocked usernames
+- `normalization`: normalization strategy
+- `batchLimit`: max usernames per batch request
 
 ## Errors
 
