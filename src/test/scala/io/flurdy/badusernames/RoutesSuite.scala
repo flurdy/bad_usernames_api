@@ -25,6 +25,15 @@ class RoutesSuite extends CatsEffectSuite:
   private def field[A: io.circe.Decoder](json: Json, name: String): Either[Any, A] =
     json.hcursor.get[A](name)
 
+  // GET /health
+
+  test("GET health returns ok") {
+    run(Request[IO](Method.GET, uri"/health")).map { (status, json) =>
+      assertEquals(status, Status.Ok)
+      assertEquals(field[String](json, "status"), Right("ok"))
+    }
+  }
+
   // GET /api/v1/check/{username}
 
   test("GET check returns bad=true for a matched username") {
@@ -135,6 +144,7 @@ class RoutesSuite extends CatsEffectSuite:
     app.run(Request[IO](Method.GET, uri"/")).flatMap { response =>
       response.as[String].map { body =>
         assertEquals(response.status, Status.Ok)
+        assert(body.contains("/health"), s"expected root body to mention health, got: $body")
         assert(body.contains("/api/v1/meta"), s"expected root body to mention meta, got: $body")
       }
     }

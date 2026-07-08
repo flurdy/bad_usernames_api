@@ -16,7 +16,10 @@ final class Routes(
 ):
   val httpRoutes: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Root =>
-      Ok("Bad Usernames API\n\nSee /api/v1/meta and /api/v1/check/{username}.\n")
+      Ok("Bad Usernames API\n\nSee /health, /api/v1/meta and /api/v1/check/{username}.\n")
+
+    case GET -> Root / "health" =>
+      Ok(HealthResponse("ok"))
 
     case GET -> Root / "api" / "v1" / "check" / username =>
       val result = checker.check(username)

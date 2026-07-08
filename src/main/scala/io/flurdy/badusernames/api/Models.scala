@@ -38,6 +38,11 @@ final case class MetaResponse(
 object MetaResponse:
   given Encoder[MetaResponse] = deriveEncoder[MetaResponse]
 
+final case class HealthResponse(status: String)
+
+object HealthResponse:
+  given Encoder[HealthResponse] = deriveEncoder[HealthResponse]
+
 final case class ErrorResponse(error: String)
 
 object ErrorResponse:

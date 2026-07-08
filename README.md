@@ -64,6 +64,7 @@ BAD_USERNAMES_DATASET_PATH=dev/sample-bad-usernames.json sbt run
 Then open:
 
 ```bash
+curl http://localhost:8080/health
 curl http://localhost:8080/api/v1/check/admin
 curl http://localhost:8080/api/v1/meta
 ```
