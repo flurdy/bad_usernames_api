@@ -99,5 +99,5 @@ Once running:
 
 ```bash
 curl http://localhost:8080/api/v1/meta
-curl http://localhost:8080/api/v1/check/admin
+curl 'http://localhost:8080/api/v1/check?username=admin'
 ```

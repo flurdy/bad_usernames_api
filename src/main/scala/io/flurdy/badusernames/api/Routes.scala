@@ -16,15 +16,19 @@ final class Routes(
 ):
   val httpRoutes: HttpRoutes[IO] = HttpRoutes.of[IO] {
     case GET -> Root =>
-      Ok("Bad Usernames API\n\nSee /health, /api/v1/meta and /api/v1/check/{username}.\n")
+      Ok("Bad Usernames API\n\nSee /health, /api/v1/meta and /api/v1/check?username={username}.\n")
 
     case GET -> Root / "health" =>
       Ok(HealthResponse("ok"))
 
-    case GET -> Root / "api" / "v1" / "check" / username =>
-      val result = checker.check(username)
-      if result.normalized.isEmpty then BadRequest(ErrorResponse("username must not be empty"))
-      else Ok(toResponse(result))
+    case GET -> Root / "api" / "v1" / "check" :? UsernameQueryParamMatcher(username) =>
+      username match
+        case Some(value) =>
+          val result = checker.check(value)
+          if result.normalized.isEmpty then BadRequest(ErrorResponse("username must not be empty"))
+          else Ok(toResponse(result))
+        case None =>
+          BadRequest(ErrorResponse("username query parameter is required"))
 
     case request @ POST -> Root / "api" / "v1" / "check" =>
       request.attemptAs[BatchCheckRequest].value.flatMap {
@@ -63,6 +67,8 @@ final class Routes(
       bad = result.bad,
       matched = result.matched
     )
+
+private object UsernameQueryParamMatcher extends OptionalQueryParamDecoderMatcher[String]("username")
 
 private object BuildInfo:
   val version: String = sys.props.getOrElse("bad-usernames-api.version", "0.1.0-SNAPSHOT")

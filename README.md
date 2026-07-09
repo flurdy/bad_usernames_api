@@ -13,7 +13,7 @@ Early scaffold. The intended public hosted service is free, open source, and bes
 ### Single username check
 
 ```http
-GET /api/v1/check/admin
+GET /api/v1/check?username=admin
 ```
 
 ```json
@@ -65,7 +65,7 @@ Then open:
 
 ```bash
 curl http://localhost:8080/health
-curl http://localhost:8080/api/v1/check/admin
+curl 'http://localhost:8080/api/v1/check?username=admin'
 curl http://localhost:8080/api/v1/meta
 ```
 

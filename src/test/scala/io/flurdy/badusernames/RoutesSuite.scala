@@ -34,38 +34,55 @@ class RoutesSuite extends CatsEffectSuite:
     }
   }
 
-  // GET /api/v1/check/{username}
+  // GET /api/v1/check?username=...
 
   test("GET check returns bad=true for a matched username") {
-    run(Request[IO](Method.GET, uri"/api/v1/check/admin")).map { (status, json) =>
-      assertEquals(status, Status.Ok)
-      assertEquals(field[Boolean](json, "bad"), Right(true))
-      assertEquals(field[String](json, "matched"), Right("admin"))
-      assertEquals(field[String](json, "normalized"), Right("admin"))
+    run(Request[IO](Method.GET, uri"/api/v1/check".withQueryParam("username", "admin"))).map {
+      (status, json) =>
+        assertEquals(status, Status.Ok)
+        assertEquals(field[Boolean](json, "bad"), Right(true))
+        assertEquals(field[String](json, "matched"), Right("admin"))
+        assertEquals(field[String](json, "normalized"), Right("admin"))
     }
   }
 
   test("GET check normalizes trim + lowercase before matching") {
-    run(Request[IO](Method.GET, uri"/api/v1/check/%20Admin%20")).map { (status, json) =>
-      assertEquals(status, Status.Ok)
-      assertEquals(field[Boolean](json, "bad"), Right(true))
-      assertEquals(field[String](json, "normalized"), Right("admin"))
-      assertEquals(field[String](json, "username"), Right(" Admin "))
+    run(Request[IO](Method.GET, uri"/api/v1/check".withQueryParam("username", " Admin "))).map {
+      (status, json) =>
+        assertEquals(status, Status.Ok)
+        assertEquals(field[Boolean](json, "bad"), Right(true))
+        assertEquals(field[String](json, "normalized"), Right("admin"))
+        assertEquals(field[String](json, "username"), Right(" Admin "))
     }
   }
 
   test("GET check returns bad=false with null matched for an allowed username") {
-    run(Request[IO](Method.GET, uri"/api/v1/check/ivar")).map { (status, json) =>
-      assertEquals(status, Status.Ok)
-      assertEquals(field[Boolean](json, "bad"), Right(false))
-      assertEquals(field[Option[String]](json, "matched"), Right(None))
+    run(Request[IO](Method.GET, uri"/api/v1/check".withQueryParam("username", "ivar"))).map {
+      (status, json) =>
+        assertEquals(status, Status.Ok)
+        assertEquals(field[Boolean](json, "bad"), Right(false))
+        assertEquals(field[Option[String]](json, "matched"), Right(None))
     }
   }
 
   test("GET check returns 400 for a whitespace-only username") {
-    run(Request[IO](Method.GET, uri"/api/v1/check/%20")).map { (status, json) =>
+    run(Request[IO](Method.GET, uri"/api/v1/check".withQueryParam("username", " "))).map {
+      (status, json) =>
+        assertEquals(status, Status.BadRequest)
+        assertEquals(field[String](json, "error"), Right("username must not be empty"))
+    }
+  }
+
+  test("GET check returns 400 when username query parameter is missing") {
+    run(Request[IO](Method.GET, uri"/api/v1/check")).map { (status, json) =>
       assertEquals(status, Status.BadRequest)
-      assertEquals(field[String](json, "error"), Right("username must not be empty"))
+      assertEquals(field[String](json, "error"), Right("username query parameter is required"))
+    }
+  }
+
+  test("GET check path username endpoint is not supported") {
+    app.run(Request[IO](Method.GET, uri"/api/v1/check/admin")).map { response =>
+      assertEquals(response.status, Status.NotFound)
     }
   }
 

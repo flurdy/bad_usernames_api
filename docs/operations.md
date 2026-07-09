@@ -36,7 +36,7 @@ Possible later endpoints:
 
 ## Caching
 
-Exact username checks are deterministic once a dataset is loaded. Later versions can add cache headers, especially for `GET /api/v1/check/{username}` and `/api/v1/meta`.
+Exact username checks are deterministic once a dataset is loaded. Later versions can add cache headers, especially for `GET /api/v1/check?username=...` and `/api/v1/meta`.
 
 ## Abuse controls
 

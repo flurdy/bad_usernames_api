@@ -20,14 +20,14 @@ Returns a small JSON health response for Kubernetes probes and uptime checks.
 }
 ```
 
-## `GET /api/v1/check/{username}`
+## `GET /api/v1/check?username={username}`
 
-Checks a single username.
+Checks a single username passed as a query parameter. This avoids treating the username as a path segment, because usernames can contain Unicode, spaces, slashes, or other characters that are awkward in paths.
 
 Example:
 
 ```http
-GET /api/v1/check/admin
+GET /api/v1/check?username=admin
 ```
 
 ```json
@@ -98,7 +98,7 @@ Initial error shape:
 
 Important initial cases:
 
-- `400` for empty username.
+- `400` for missing or empty username.
 - `400` for malformed JSON.
 - `400` if batch size exceeds the configured limit.
 - `404` for unknown routes.
