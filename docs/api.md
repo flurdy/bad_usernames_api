@@ -11,6 +11,10 @@ Base path: `/api/v1`.
 - Return both original and normalized values so behavior is transparent.
 - Make responses deterministic and cache-friendly.
 
+## `GET /`
+
+Returns a small HTML landing page with links to the main API endpoints and documentation.
+
 ## `GET /health`
 
 Returns a small JSON health response for Kubernetes probes and uptime checks.

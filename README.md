@@ -12,6 +12,14 @@ Early scaffold. The intended public hosted service is free, open source, and bes
 
 Base path: `/api/v1`.
 
+### Service root
+
+```http
+GET /
+```
+
+Returns a small HTML landing page with documentation and endpoint links.
+
 ### Health
 
 ```http

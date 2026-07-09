@@ -184,12 +184,18 @@ class RoutesSuite extends CatsEffectSuite:
 
   // Root + unknown routes
 
-  test("GET root returns a plain-text pointer") {
+  test("GET root returns a simple HTML landing page") {
     app.run(Request[IO](Method.GET, uri"/")).flatMap { response =>
-      response.as[String].map { body =>
+      response.bodyText.compile.string.map { body =>
         assertEquals(response.status, Status.Ok)
-        assert(body.contains("/health"), s"expected root body to mention health, got: $body")
-        assert(body.contains("/api/v1/meta"), s"expected root body to mention meta, got: $body")
+        assertEquals(response.contentType.map(_.mediaType), Some(MediaType.text.html))
+        assert(body.contains("<h1>Bad Usernames API</h1>"), s"expected page title, got: $body")
+        assert(body.contains("href=\"/health\""), s"expected health link, got: $body")
+        assert(body.contains("href=\"/api/v1/meta\""), s"expected meta link, got: $body")
+        assert(
+          body.contains("href=\"/api/v1/check?username=admin\""),
+          s"expected check example link, got: $body"
+        )
       }
     }
   }
