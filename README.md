@@ -8,7 +8,21 @@ It is intended to wrap the existing [`flurdy/bad_usernames`](https://github.com/
 
 Early scaffold. The intended public hosted service is free, open source, and best-effort.
 
-## Planned API
+## API
+
+Base path: `/api/v1`.
+
+### Health
+
+```http
+GET /health
+```
+
+```json
+{
+  "status": "ok"
+}
+```
 
 ### Single username check
 
@@ -16,12 +30,47 @@ Early scaffold. The intended public hosted service is free, open source, and bes
 GET /api/v1/check?username=admin
 ```
 
+Exact matches set `bad` to `true` and are reported both in `matched` and `matches`:
+
 ```json
 {
   "username": "admin",
   "normalized": "admin",
   "bad": true,
-  "matched": "admin"
+  "matched": "admin",
+  "matches": [
+    { "matchType": "exact", "term": "admin" }
+  ]
+}
+```
+
+Allowed usernames return `bad: false` with no matches:
+
+```json
+{
+  "username": "ivar",
+  "normalized": "ivar",
+  "bad": false,
+  "matched": null,
+  "matches": []
+}
+```
+
+Substring matches are advisory only. They do not set `bad` by themselves, because they can produce false positives:
+
+```http
+GET /api/v1/check?username=admin123
+```
+
+```json
+{
+  "username": "admin123",
+  "normalized": "admin123",
+  "bad": false,
+  "matched": null,
+  "matches": [
+    { "matchType": "substring", "term": "admin" }
+  ]
 }
 ```
 
@@ -32,7 +81,35 @@ POST /api/v1/check
 Content-Type: application/json
 
 {
-  "usernames": ["admin", "ivar", "support"]
+  "usernames": ["admin", "ivar", "support-team"]
+}
+```
+
+```json
+{
+  "results": [
+    {
+      "username": "admin",
+      "normalized": "admin",
+      "bad": true,
+      "matched": "admin",
+      "matches": [{ "matchType": "exact", "term": "admin" }]
+    },
+    {
+      "username": "ivar",
+      "normalized": "ivar",
+      "bad": false,
+      "matched": null,
+      "matches": []
+    },
+    {
+      "username": "support-team",
+      "normalized": "support-team",
+      "bad": false,
+      "matched": null,
+      "matches": [{ "matchType": "substring", "term": "support" }]
+    }
+  ]
 }
 ```
 
@@ -41,6 +118,8 @@ Content-Type: application/json
 ```http
 GET /api/v1/meta
 ```
+
+Returns service version, dataset version, loaded languages, word count, normalization strategy, and batch limit.
 
 ## Development
 

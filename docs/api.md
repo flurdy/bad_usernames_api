@@ -5,7 +5,8 @@ Base path: `/api/v1`.
 ## Principles
 
 - JSON only.
-- Exact-match checks only for the first version.
+- Exact matches decide the `bad` field.
+- Substring matches are advisory only and do not set `bad` by themselves.
 - Normalize input by trimming whitespace and lowercasing with `Locale.ROOT`.
 - Return both original and normalized values so behavior is transparent.
 - Make responses deterministic and cache-friendly.
@@ -35,7 +36,10 @@ GET /api/v1/check?username=admin
   "username": "admin",
   "normalized": "admin",
   "bad": true,
-  "matched": "admin"
+  "matched": "admin",
+  "matches": [
+    { "matchType": "exact", "term": "admin" }
+  ]
 }
 ```
 
@@ -46,9 +50,26 @@ If the username is not blocked:
   "username": "ivar",
   "normalized": "ivar",
   "bad": false,
-  "matched": null
+  "matched": null,
+  "matches": []
 }
 ```
+
+If the username contains a blocked term but is not an exact match, `bad` remains `false` and the advisory substring match is returned in `matches`:
+
+```json
+{
+  "username": "admin123",
+  "normalized": "admin123",
+  "bad": false,
+  "matched": null,
+  "matches": [
+    { "matchType": "substring", "term": "admin" }
+  ]
+}
+```
+
+Substring matches can be false-positive-prone, for example place names containing blocked terms, so clients should treat `matchType: "substring"` as explainable advisory data rather than an exact block decision.
 
 ## `POST /api/v1/check`
 
@@ -65,9 +86,27 @@ Response:
 ```json
 {
   "results": [
-    { "username": "admin", "normalized": "admin", "bad": true, "matched": "admin" },
-    { "username": "ivar", "normalized": "ivar", "bad": false, "matched": null },
-    { "username": "support", "normalized": "support", "bad": true, "matched": "support" }
+    {
+      "username": "admin",
+      "normalized": "admin",
+      "bad": true,
+      "matched": "admin",
+      "matches": [{ "matchType": "exact", "term": "admin" }]
+    },
+    {
+      "username": "ivar",
+      "normalized": "ivar",
+      "bad": false,
+      "matched": null,
+      "matches": []
+    },
+    {
+      "username": "support",
+      "normalized": "support",
+      "bad": true,
+      "matched": "support",
+      "matches": [{ "matchType": "exact", "term": "support" }]
+    }
   ]
 }
 ```

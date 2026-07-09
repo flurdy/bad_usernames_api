@@ -5,11 +5,20 @@ import io.circe.Encoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.generic.semiauto.deriveEncoder
 
+final case class MatchResponse(
+    matchType: String,
+    term: String
+)
+
+object MatchResponse:
+  given Encoder[MatchResponse] = deriveEncoder[MatchResponse]
+
 final case class CheckResponse(
     username: String,
     normalized: String,
     bad: Boolean,
-    matched: Option[String]
+    matched: Option[String],
+    matches: List[MatchResponse]
 )
 
 object CheckResponse:

@@ -43,6 +43,15 @@ class RoutesSuite extends CatsEffectSuite:
         assertEquals(field[Boolean](json, "bad"), Right(true))
         assertEquals(field[String](json, "matched"), Right("admin"))
         assertEquals(field[String](json, "normalized"), Right("admin"))
+        assertEquals(field[List[Json]](json, "matches").map(_.size), Right(1))
+        assertEquals(
+          json.hcursor.downField("matches").downArray.get[String]("matchType"),
+          Right("exact")
+        )
+        assertEquals(
+          json.hcursor.downField("matches").downArray.get[String]("term"),
+          Right("admin")
+        )
     }
   }
 
@@ -62,6 +71,24 @@ class RoutesSuite extends CatsEffectSuite:
         assertEquals(status, Status.Ok)
         assertEquals(field[Boolean](json, "bad"), Right(false))
         assertEquals(field[Option[String]](json, "matched"), Right(None))
+        assertEquals(field[List[Json]](json, "matches"), Right(Nil))
+    }
+  }
+
+  test("GET check identifies advisory substring matches") {
+    run(Request[IO](Method.GET, uri"/api/v1/check".withQueryParam("username", "admin123"))).map {
+      (status, json) =>
+        assertEquals(status, Status.Ok)
+        assertEquals(field[Boolean](json, "bad"), Right(false))
+        assertEquals(field[Option[String]](json, "matched"), Right(None))
+        assertEquals(
+          json.hcursor.downField("matches").downArray.get[String]("matchType"),
+          Right("substring")
+        )
+        assertEquals(
+          json.hcursor.downField("matches").downArray.get[String]("term"),
+          Right("admin")
+        )
     }
   }
 

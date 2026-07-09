@@ -65,10 +65,14 @@ final class Routes(
       username = result.username,
       normalized = result.normalized,
       bad = result.bad,
-      matched = result.matched
+      matched = result.matched,
+      matches = result.matches.map(matchResult =>
+        MatchResponse(matchType = matchResult.matchType, term = matchResult.term)
+      )
     )
 
-private object UsernameQueryParamMatcher extends OptionalQueryParamDecoderMatcher[String]("username")
+private object UsernameQueryParamMatcher
+    extends OptionalQueryParamDecoderMatcher[String]("username")
 
 private object BuildInfo:
   val version: String = sys.props.getOrElse("bad-usernames-api.version", "0.1.0-SNAPSHOT")

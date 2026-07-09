@@ -9,13 +9,14 @@ Bad Usernames API should stay deliberately small.
 3. Normalize all dataset usernames into an in-memory `Set[String]`.
 4. Serve HTTP requests using http4s.
 5. For each check, normalize input and perform an exact set lookup.
+6. If no exact match exists, scan the in-memory set for advisory substring matches.
 
 ## Main components
 
 - `config.AppConfig` — environment-backed configuration.
 - `core.UsernameNormalizer` — deterministic username normalization.
 - `core.UsernameDataset` — dataset loading and metadata.
-- `core.UsernameChecker` — pure exact-match check logic.
+- `core.UsernameChecker` — pure exact-match and advisory substring check logic.
 - `api.Models` — request/response JSON models.
 - `api.Routes` — http4s routes.
 - `Main` — application wiring.
@@ -27,7 +28,7 @@ The first version should not include:
 - database storage
 - user accounts
 - API keys
-- fuzzy matching
+- fuzzy matching beyond exact substring advisories
 - unicode spoof detection
 - tenant-specific rules
 - background refresh
