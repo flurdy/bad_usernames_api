@@ -53,4 +53,4 @@
 # - github.org
 # - github.repo
 
-sync.remote: "git+https://github.com/flurdy/bad_usernames_api.git"
+# sync.remote: "git+https://github.com/flurdy/bad_usernames_api.git"
