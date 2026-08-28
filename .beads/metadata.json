@@ -1,7 +1,7 @@
 {
   "database": "dolt",
   "backend": "dolt",
-  "dolt_mode": "server",
-  "dolt_database": "bad_usernames_api",
-  "project_id": "aa96a59a-573a-4842-83ed-36f1d8189b98"
+  "dolt_mode": "embedded",
+  "dolt_database": "bad_usernames",
+  "project_id": "7e0ee922-b00a-48ae-827e-ae9ebb6bd21c"
 }
