@@ -37,3 +37,4 @@ replay_pid*
 
 # Beads / Dolt files (added by bd init)
 .beads/proxieddb/
+.beads.gate.lock*
