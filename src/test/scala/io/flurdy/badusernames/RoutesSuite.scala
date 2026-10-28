@@ -196,6 +196,19 @@ class RoutesSuite extends CatsEffectSuite:
           body.contains("href=\"/api/v1/check?username=admin\""),
           s"expected check example link, got: $body"
         )
+        assert(
+          body.contains("missing or incorrect username"),
+          s"expected contribution prompt: $body"
+        )
+        assert(
+          body.contains("href=\"https://github.com/flurdy/bad_usernames#contribute\""),
+          s"expected dataset contribution link: $body"
+        )
+        assert(
+          body.contains("href=\"https://github.com/flurdy/bad_usernames_api\""),
+          s"expected API contribution link: $body"
+        )
+        assert(body.contains("service code or API changes"), s"expected service guidance: $body")
       }
     }
   }

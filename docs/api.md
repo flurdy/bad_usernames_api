@@ -13,7 +13,7 @@ Base path: `/api/v1`.
 
 ## `GET /`
 
-Returns a small HTML landing page with links to the main API endpoints and documentation.
+Returns a small HTML landing page with links to the main API endpoints, documentation, and dataset and service contribution repositories.
 
 ## `GET /health`
 

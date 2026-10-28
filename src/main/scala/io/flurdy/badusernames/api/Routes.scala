@@ -96,6 +96,7 @@ final class Routes(
       |      <li><code>POST /api/v1/check</code> — check multiple usernames</li>
       |      <li><a href="https://github.com/flurdy/bad_usernames_api#readme">Documentation</a></li>
       |    </ul>
+      |    <p>Found a missing or incorrect username? <a href="https://github.com/flurdy/bad_usernames#contribute">Contribute to the dataset</a>. For service code or API changes, contribute to the <a href="https://github.com/flurdy/bad_usernames_api">API repository</a>.</p>
       |  </body>
       |</html>
       |""".stripMargin
