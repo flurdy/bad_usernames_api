@@ -2,7 +2,7 @@ ThisBuild / organization := "io.flurdy"
 ThisBuild / scalaVersion := "3.5.2"
 ThisBuild / version := "0.1.0-SNAPSHOT"
 
-val http4sVersion = "0.23.30"
+val http4sVersion = "0.23.35"
 val circeVersion = "0.14.10"
 val log4catsVersion = "2.7.0"
 val munitCatsEffectVersion = "2.0.0"

@@ -61,7 +61,7 @@ clean: ## Remove build artifacts
 
 .PHONY: docker-build
 docker-build: ## Build the local Docker image
-	$(DOCKER) build -t $(IMAGE) .
+	$(DOCKER) build --pull -t $(IMAGE) .
 
 .PHONY: docker-run
 docker-run: ## Run the Docker image with DATASET mounted read-only

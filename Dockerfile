@@ -9,7 +9,8 @@ RUN sbt clean stage
 # Stage 2: minimal runtime image
 FROM eclipse-temurin:17-jre-alpine
 
-RUN apk add --no-cache bash && \
+RUN apk upgrade --no-cache && \
+    apk add --no-cache bash && \
     mkdir -p /opt/app /data
 
 WORKDIR /opt/app
