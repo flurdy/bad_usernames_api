@@ -13,6 +13,9 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache bash && \
     mkdir -p /opt/app /data
 
+COPY docker/distrust-emudhra-roots.sh /tmp/
+RUN sh /tmp/distrust-emudhra-roots.sh && rm /tmp/distrust-emudhra-roots.sh
+
 WORKDIR /opt/app
 
 COPY --from=builder /opt/build/target/universal/stage /opt/app
