@@ -179,6 +179,14 @@ For container and self-hosting examples, see `docker/README.md` and `docs/self-h
 | `BAD_USERNAMES_DATASET_VERSION` | unset | Optional dataset version/commit exposed in `/api/v1/meta` |
 | `BAD_USERNAMES_BATCH_LIMIT` | `1000` | Max usernames per batch request |
 
+## Contributing bad username data
+
+Found a missing or incorrectly listed username? Send a [pull request to `flurdy/bad_usernames`](https://github.com/flurdy/bad_usernames/pulls), the upstream dataset, rather than changing this service's vendored snapshot. Edit the relevant language JSON file, such as `bad_usernames.en.json`, and explain why the term should be added or removed. See the [dataset contribution guide](https://github.com/flurdy/bad_usernames#contribute) for details, including new languages.
+
+Use this API repository for service bugs, API behavior, and documentation changes. Dataset updates reach the service when its snapshot is refreshed; merging a dataset PR does not immediately update the hosted API.
+
+Substring matches remain advisory only; they do not set `bad` by themselves.
+
 ## Licenses
 
 - API service code: Apache-2.0
